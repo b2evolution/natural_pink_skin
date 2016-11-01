@@ -38,36 +38,39 @@ $params = array_merge( array(
 		{
 			$Item->status( array( 'format' => 'styled' ) );
 		}
-		$Item->permanent_link( array(
-				'text' => '#icon#',
+		
+		if( ! $Item->is_intro() ) // Do NOT apply tags, comments and feedback on intro posts
+		{ // List all tags attached to this post:
+			$Item->permanent_link( array(
+					'text' => '#icon#',
+				) );
+
+			$Item->issue_time( array(
+					'before'    => ' ',
+					'after'     => '',
+				) );
+			$Item->author( array(
+					'before'    => ' '.T_('by').' ',
+					'after'     => '',
+					'link_text' => 'preferredname',
+				) );
+
+			$Item->categories( array(
+				'before'          => ', '.T_('Categories').': ',
+				'after'           => ' ',
+				'include_main'    => true,
+				'include_other'   => true,
+				'include_external'=> true,
+				'link_categories' => true,
 			) );
 
-		$Item->issue_time( array(
-				'before'    => ' ',
-				'after'     => '',
-			) );
-
-		$Item->author( array(
-				'before'    => ' '.T_('by').' ',
-				'after'     => '',
-				'link_text' => 'preferredname',
-			) );
-
-		$Item->categories( array(
-			'before'          => ', '.T_('Categories').': ',
-			'after'           => ' ',
-			'include_main'    => true,
-			'include_other'   => true,
-			'include_external'=> true,
-			'link_categories' => true,
-		) );
-
-		// List all tags attached to this post:
-		$Item->tags( array(
-				'before' =>         ', '.T_('Tags').': ',
-				'after' =>          ' ',
-				'separator' =>      ', ',
-			) );
+			// List all tags attached to this post:
+			$Item->tags( array(
+					'before' =>         ', '.T_('Tags').': ',
+					'after' =>          ' ',
+					'separator' =>      ', ',
+				) );
+		}
 	?>
 	</div>
 
@@ -86,7 +89,9 @@ $params = array_merge( array(
 	?>
 
 	<div class="bSmallPrint">
-		<?php
+		<?php		
+		if( ! $Item->is_intro() ) // Do NOT apply tags, comments and feedback on intro posts
+		{ // List all tags attached to this post:
 			$Item->permanent_link();
 
 			// Link to comments, trackbacks, etc.:
@@ -117,6 +122,7 @@ $params = array_merge( array(
 					'before'    => ' &bull; ',
 					'after'     => '',
 				) );
+		}
 		?>
 	</div>
 
